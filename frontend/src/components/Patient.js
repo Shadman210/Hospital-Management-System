@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Calendar as CalendarIcon, Eye, EyeOff, Hospital } from 'lucide-react';
+import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Calendar as CalendarIcon, Eye, EyeOff, Hospital, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Chat from './Chat';
 
 const Button = ({ children, variant = 'primary', className = '', ...props }) => (
   <button
@@ -92,6 +93,32 @@ export default function PatientDashboard() {
     fetchCareTeam();
     fetchPrescriptions();
   }, []);
+
+  const startChatWithDoctor = async (doctorId, doctorName) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/chat/get-or-create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          patientId: patientInfo._id,
+          doctorId: doctorId
+        })
+      });
+
+      if (response.ok) {
+        setActiveTab('Chat');
+      } else {
+        alert('Failed to start chat');
+      }
+    } catch (error) {
+      console.error('Error starting chat:', error);
+      alert('Error starting chat. Please try again.');
+    }
+  };
 
   const fetchPatientProfile = async () => {
     try {
@@ -266,7 +293,7 @@ export default function PatientDashboard() {
               {appointments.length > 0 ? (
                 appointments.map((appointment, index) => (
                   <div key={index} className="flex justify-between items-center py-2 border-t">
-                    <div>
+                    <div className="flex-1">
                       <p className="text-sm font-medium">
                         Dr. {appointment.doctorId.firstName} {appointment.doctorId.lastName}
                       </p>
@@ -274,7 +301,16 @@ export default function PatientDashboard() {
                         {appointment.reason}
                       </p>
                     </div>
-                    <p className="text-sm">{appointment.time}</p>
+                    <div className="flex items-center space-x-2">
+                      <p className="text-sm">{appointment.time}</p>
+                      <button
+                        onClick={() => startChatWithDoctor(appointment.doctorId._id, `${appointment.doctorId.firstName} ${appointment.doctorId.lastName}`)}
+                        className="p-1 hover:bg-blue-100 rounded-full transition-colors"
+                        title="Chat with doctor"
+                      >
+                        <MessageCircle className="h-4 w-4 text-blue-600" />
+                      </button>
+                    </div>
                   </div>
                 ))
               ) : (
@@ -572,6 +608,16 @@ export default function PatientDashboard() {
               Appointment Booking
             </Button>
           </li>
+          <li>
+            <Button
+              variant={activeTab === 'Chat' ? "outline" : "ghost"}
+              className={`hover:bg-white hover:text-blue-600 ${activeTab === 'Chat' ? 'bg-white text-blue-600' : 'text-white'}`}
+              onClick={() => setActiveTab('Chat')}
+            >
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Chat with Doctors
+            </Button>
+          </li>
         </ul>
       </nav>
       <main className="container mx-auto px-4 py-8">
@@ -579,6 +625,7 @@ export default function PatientDashboard() {
         {activeTab === 'Dashboard' && renderDashboard()}
         {activeTab === 'Profile' && renderProfile()}
         {activeTab === 'Appointment Booking' && renderAppointmentBooking()}
+        {activeTab === 'Chat' && <Chat userRole="patient" userId={patientInfo?._id} />}
       </main>
     </div>
   );

@@ -9,7 +9,7 @@ const MONGO_URI = "mongodb://localhost:27017/hospitaldb";
 async function createAdmin() {
   try {
     // 1️⃣ Connect to DB
-    await mongoose.connect(MONGO_URI, {
+    await mongoose.connect(`mongodb://localhost:27017/hospitaldb`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

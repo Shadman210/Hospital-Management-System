@@ -5,6 +5,7 @@ import {
   FileText,
   Home,
   Hospital,
+  MessageCircle,
   Stethoscope,
   User,
   UserCircle,
@@ -12,6 +13,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Chat from './Chat';
 
 const Button = ({
   children,
@@ -921,6 +923,20 @@ export default function DoctorDashboard() {
               Patient Management
             </Button>
           </li>
+          <li>
+            <Button
+              variant={activeTab === "Chat" ? "outline" : "ghost"}
+              className={`hover:bg-white hover:text-blue-600 ${
+                activeTab === "Chat"
+                  ? "bg-white text-blue-600"
+                  : "text-white"
+              }`}
+              onClick={() => setActiveTab("Chat")}
+            >
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Chat with Patients
+            </Button>
+          </li>
         </ul>
       </nav>
       <main className="container mx-auto px-4 py-8">
@@ -930,6 +946,7 @@ export default function DoctorDashboard() {
         {activeTab === "Dashboard" && renderDashboard()}
         {activeTab === "Profile" && renderProfile()}
         {activeTab === "Patient Management" && renderPatientManagement()}
+        {activeTab === "Chat" && <Chat userRole="doctor" userId={doctorInfo?._id} />}
       </main>
     </div>
   );
