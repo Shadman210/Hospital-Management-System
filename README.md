@@ -115,7 +115,9 @@ The Hospital Management System is a comprehensive web application designed to st
 
 For detailed Docker deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
-#### Manual Installation (Without Docker)
+#### Automated Manual Installation (All Dependencies Included)
+
+For development or testing without Docker, use the automated manual deployment script:
 
 1.  **Clone the repository**:
 
@@ -124,14 +126,78 @@ For detailed Docker deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
     cd Hospital-Management-System
     ```
 
-2.  **Install backend dependencies**:
+2.  **Run the automated deployment script**:
+
+    ```bash
+    ./deploy-manual.sh
+    ```
+
+    This script will automatically:
+    - Install Node.js 18.x (if not present)
+    - Install MongoDB 7.0 (if not present)
+    - Install all backend dependencies
+    - Install all frontend dependencies
+    - Create environment files
+    - Create admin user
+    - Start backend on port 4000
+    - Start frontend on port 4001
+
+3.  **Access the application**:
+    - Frontend: http://localhost:4001
+    - Backend: http://localhost:4000
+    - Default admin: admin@example.com / admin123
+
+4.  **Stop services**:
+    ```bash
+    ./stop-manual.sh
+    ```
+
+For detailed manual deployment instructions, see [MANUAL_DEPLOYMENT.md](MANUAL_DEPLOYMENT.md).
+
+#### Step-by-Step Manual Installation
+
+If you prefer to install each component manually:
+
+1.  **Clone the repository**:
+
+    ```bash
+    git clone https://github.com/MKPTechnicals/Hospital-Management-System-MERN.git
+    cd Hospital-Management-System
+    ```
+
+2.  **Install Node.js 18.x**:
+
+    ```bash
+    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    ```
+
+3.  **Install MongoDB 7.0**:
+
+    ```bash
+    # Import GPG key
+    curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+        sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+
+    # Add repository
+    echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | \
+        sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+    # Install and start
+    sudo apt-get update
+    sudo apt-get install -y mongodb-org
+    sudo systemctl start mongod
+    sudo systemctl enable mongod
+    ```
+
+4.  **Install backend dependencies**:
 
     ```bash
     cd backend
     npm install
     ```
 
-3.  **Install frontend dependencies**:
+5.  **Install frontend dependencies**:
 
     ```bash
     cd ../frontend
