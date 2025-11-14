@@ -4,12 +4,12 @@ const User = require("./models/User");
 const Admin = require("./models/Admin");
 
 // ✅ MongoDB connection URI (update if needed)
-const MONGO_URI = "mongodb://localhost:27017/hospitaldb";
+const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/hospitaldb";
 
 async function createAdmin() {
   try {
     // 1️⃣ Connect to DB
-    await mongoose.connect(`mongodb://localhost:27017/hospitaldb`, {
+    await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

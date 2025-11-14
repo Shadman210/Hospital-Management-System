@@ -77,10 +77,45 @@ The Hospital Management System is a comprehensive web application designed to st
 
 ### Prerequisites
 
+#### Option 1: Docker (Recommended)
+- Docker Engine 20.10 or higher
+- Docker Compose 2.0 or higher
+
+#### Option 2: Manual Installation
 - Node.js (v14 or higher)
 - MongoDB (local or cloud instance)
 
 ### Installation
+
+#### Quick Start with Docker (Recommended)
+
+1.  **Clone the repository**:
+
+    ```bash
+    git clone https://github.com/MKPTechnicals/Hospital-Management-System-MERN.git
+    cd Hospital-Management-System
+    ```
+
+2.  **Deploy with one command**:
+
+    ```bash
+    ./deploy.sh
+    ```
+
+    This will:
+    - Build all Docker images
+    - Start MongoDB, Backend, and Frontend services
+    - Automatically create the admin user
+    - Display access URLs and credentials
+
+3.  **Access the application**:
+    - Frontend: http://localhost:3000
+    - Backend: http://localhost:5000
+    - Default admin: admin@example.com / admin123
+
+For detailed Docker deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+#### Manual Installation (Without Docker)
 
 1.  **Clone the repository**:
 

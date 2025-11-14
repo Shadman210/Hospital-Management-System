@@ -23,8 +23,10 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/hospitaldb";
+
 mongoose
-  .connect("mongodb://localhost:27017/hospitaldb", {
+  .connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
